@@ -1,0 +1,31 @@
+.register {
+    width: 500px;
+}
+.home {
+    height: 80%;
+    width: 80%;
+}
+
+.name {
+    font-size: 10pt;
+}
+
+.log-out {
+    font-size: 8pt;
+    margin: 0;
+}
+.user:hover{
+    background-color: #e2e2e2;
+}
+.chating {
+    height: calc(100% - 46px);
+}
+.messages {
+    height: calc(100% - 60px);
+}
+.input {
+    height:60px;
+}
+.info-message {
+    max-width: 80%;
+}
