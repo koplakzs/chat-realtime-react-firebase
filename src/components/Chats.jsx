@@ -1,30 +1,54 @@
-import React from "react";
+import { useContext, useEffect, useState } from "react";
+import { db } from "../firebase";
+import { doc, onSnapshot } from "firebase/firestore";
+import { AuthContext } from "../context/AuthContext";
 
 const Chats = () => {
+  const [chats, setChats] = useState([]);
+  const { currentUser } = useContext(AuthContext);
+  useEffect(() => {
+    const getChats = () => {
+      const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
+        setChats(doc.data());
+      });
+
+      return () => {
+        unsub();
+      };
+    };
+    currentUser.uid && getChats();
+  }, [currentUser.uid]);
+
+  console.log(Object.entries(chats));
   return (
-    <div
-      className="user mb-2 pb-2 pt-2 gap-3 d-flex align-items-center"
-      role="button"
-      tabIndex={0}
-    >
-      <img
-        src="https://images.unsplash.com/photo-1485875437342-9b39470b3d95?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHdvbWVufGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60"
-        alt=""
-        className="rounded-circle border-0 ms-2"
-        style={{
-          width: "40px",
-          height: "40px",
-          objectFit: "cover",
-        }}
-      />
-      <div className="user-info m-0">
-        <p className="m-0 fw-medium" style={{ fontSize: "14pt" }}>
-          Your Name
-        </p>
-        <p className="text-secondary m-0 " style={{ fontSize: "10pt" }}>
-          Your Last Chat
-        </p>
-      </div>
+    <div className="chats">
+      {Object.entries(chats)?.map((chat) => (
+        <div
+          className="user mb-2 pb-2 pt-2 gap-3 d-flex align-items-center"
+          role="button"
+          tabIndex={0}
+          key={chat[0]}
+        >
+          <img
+            src={chat[1].userInfo.photoURL}
+            alt=""
+            className="rounded-circle border-0 ms-2"
+            style={{
+              width: "40px",
+              height: "40px",
+              objectFit: "cover",
+            }}
+          />
+          <div className="user-info m-0">
+            <p className="m-0 fw-medium" style={{ fontSize: "14pt" }}>
+              {chat[1].userInfo.displayName}
+            </p>
+            <p className="text-secondary m-0 " style={{ fontSize: "10pt" }}>
+              {chat[1].userInfo.lastMessage?.text}
+            </p>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

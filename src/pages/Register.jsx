@@ -3,7 +3,7 @@ import { auth, db, storage } from "../firebase";
 import { useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 const Register = () => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const Register = () => {
               email,
               photoURL: downloadURL,
             }); //set di firebase dengan collection users, dengan document sesuai nama uid serta ada field displayName, email, photoUrl, uid
-            await setDoc(doc(db, "usersChat", res.user.uid), {});
+            await setDoc(doc(db, "userChats", res.user.uid), {});
             navigate("/");
           });
         }
@@ -98,7 +98,9 @@ const Register = () => {
           </button>
           {error ? <span>Somwthing Error</span> : ""}
         </form>
-        <p>Sudah ada akun ?? Login Skuy</p>
+        <p>
+          Sudah ada akun ??<Link to="/login"> Login Skuy </Link>
+        </p>
       </div>
     </div>
   );

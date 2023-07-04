@@ -1,11 +1,31 @@
-import "../App.css";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+
 const Login = () => {
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const email = e.target[0].value;
+    const password = e.target[1].value;
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/");
+    } catch (err) {
+      setError(true);
+      console.log(error);
+    }
+  };
   return (
     <div className="register container">
       <div className="form bg-light p-5 rounded-5 text-center">
         <h3 className="fw-bold">Welcome To Realtime Chat</h3>
         <p>Login</p>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <input
               type="email"
@@ -26,8 +46,12 @@ const Login = () => {
           <button type="submit" className="btn btn-primary mt-3 mb-3 col-12">
             Login
           </button>
+          {error ? <span>Something Error</span> : ""}
         </form>
-        <p>Belum ada akun ?? Register Skuy</p>
+
+        <p>
+          Belum ada akun ?? <Link to="/register">Register Skuy </Link>
+        </p>
       </div>
     </div>
   );

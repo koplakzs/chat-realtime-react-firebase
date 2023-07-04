@@ -4,7 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Home from "./pages/home";
+import Home from "./pages/Home";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
@@ -14,6 +14,7 @@ const App = () => {
     if (!currentUser) {
       return <Navigate to="/login" />;
     }
+    return children;
   }; //FUNGSI UNTUK MELINDUNGI ROUTE. JADI HARUS LOGIN AGAR BISA MENGAKSES ROUTE <HOME/>
   return (
     <BrowserRouter>
