@@ -1,4 +1,6 @@
+import { signOut } from "firebase/auth";
 import React from "react";
+import { auth } from "../firebase";
 const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-xxl bg-light-subtle">
@@ -28,7 +30,12 @@ const Navbar = () => {
               }}
             />
             <p className="name m-0">Your Name</p>
-            <button className="log-out btn btn-danger btn-sm">Log Out</button>
+            <button
+              className="log-out btn btn-danger btn-sm"
+              onClick={() => signOut(auth)}
+            >
+              Log Out
+            </button>
           </div>
         </div>
       </div>
