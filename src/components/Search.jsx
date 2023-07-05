@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import {
   collection,
@@ -10,10 +10,27 @@ import {
   updateDoc,
   serverTimestamp,
   getDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
+import { ChatContext } from "../context/ChatContext";
 const Search = () => {
+  // const [chats, setChats] = useState([]);
+  const { dispatch } = useContext(ChatContext);
+  // useEffect(() => {
+  //   const getChats = () => {
+  //     const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
+  //       setChats(doc.data());
+  //     });
+
+  //     return () => {
+  //       unsub();
+  //     };
+  //   };
+  //   currentUser.uid && getChats();
+  // }, [currentUser.uid]);
+
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
@@ -37,7 +54,11 @@ const Search = () => {
   const handleKey = (e) => {
     e.code === "Enter" && handleSearch();
   };
-  const handleClick = async () => {
+  const handleClick = async (u) => {
+    dispatch({
+      type: "CHANGE_USER",
+      payload: u,
+    });
     // check group chats di firestore
     const combineId =
       currentUser.uid > user.id
@@ -92,7 +113,7 @@ const Search = () => {
           className="user mb-2 pb-2 pt-2 gap-3 d-flex align-items-center border-bottom border-secondary "
           role="button"
           tabIndex={0}
-          onClick={handleClick}
+          onClick={() => handleClick(user)}
         >
           <img
             src={user.photoURL}
