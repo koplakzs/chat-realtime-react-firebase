@@ -1,16 +1,32 @@
-import { useContext } from "react";
+/* eslint-disable react/prop-types */
+import { useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { ChatContext } from "../context/ChatContext";
 
 const Message = ({ message }) => {
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
-  console.log(message);
+
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
+  }, [message]);
+
   return (
-    <div className="d-flex mt-4 ms-4 me-4 flex-row-reverse">
-      {/* <div className="me-4 ms-4">
+    <div
+      ref={ref}
+      className={`d-flex mt-4 ms-4 me-4 ${
+        message.senderId === currentUser.uid && "flex-row-reverse"
+      } `}
+    >
+      <div className="me-4 ms-4">
         <img
-          src="https://images.unsplash.com/photo-1485875437342-9b39470b3d95?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHdvbWVufGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60"
+          src={
+            message.senderId === currentUser.uid
+              ? currentUser.photoURL
+              : data.user.photoURL
+          }
           alt=""
           className="rounded-circle border-0"
           style={{
@@ -22,16 +38,26 @@ const Message = ({ message }) => {
         <p className="mt-1 fw-light">Just Now</p>
       </div>
       <div className="info-message d-flex flex-column">
-        <p className="bg-success text-light p-2 ps-3 pe-3 rounded-3">Haiiii</p>
-         <img
-          src="https://images.unsplash.com/photo-1485875437342-9b39470b3d95?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHdvbWVufGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60"
-          alt=""
-          className="border-0 "
-          style={{
-            height: "200px",
-          }}
-        /> 
-      </div> */}
+        <p
+          className={` p-2 ps-3 pe-3 rounded-3 ${
+            message.senderId === currentUser.uid
+              ? "bg-success text-light"
+              : "bg-dark-subtle"
+          }`}
+        >
+          {message.text}
+        </p>
+        {message.image && (
+          <img
+            src={message.image}
+            alt=""
+            className="border-0 "
+            style={{
+              height: "200px",
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 };

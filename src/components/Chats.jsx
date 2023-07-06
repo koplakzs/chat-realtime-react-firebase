@@ -30,34 +30,36 @@ const Chats = () => {
   // console.log(Object.entries(chats));
   return (
     <div className="chats">
-      {Object.entries(chats)?.map((chat) => (
-        <div
-          className="user mb-2 pb-2 pt-2 gap-3 d-flex align-items-center"
-          role="button"
-          tabIndex={0}
-          key={chat[0]}
-          onClick={() => handleSelect(chat[1].userInfo)}
-        >
-          <img
-            src={chat[1].userInfo.photoURL}
-            alt=""
-            className="rounded-circle border-0 ms-2"
-            style={{
-              width: "40px",
-              height: "40px",
-              objectFit: "cover",
-            }}
-          />
-          <div className="user-info m-0">
-            <p className="m-0 fw-medium" style={{ fontSize: "14pt" }}>
-              {chat[1].userInfo.displayName}
-            </p>
-            <p className="text-secondary m-0 " style={{ fontSize: "10pt" }}>
-              {chat[1].lastMessage?.text}
-            </p>
+      {Object.entries(chats)
+        ?.sort((a, b) => b[1].date - a[1].date)
+        .map((chat) => (
+          <div
+            className="user mb-2 pb-2 pt-2 gap-3 d-flex align-items-center"
+            role="button"
+            tabIndex={0}
+            key={chat[0]}
+            onClick={() => handleSelect(chat[1].userInfo)}
+          >
+            <img
+              src={chat[1].userInfo.photoURL}
+              alt=""
+              className="rounded-circle border-0 ms-2"
+              style={{
+                width: "40px",
+                height: "40px",
+                objectFit: "cover",
+              }}
+            />
+            <div className="user-info m-0">
+              <p className="m-0 fw-medium" style={{ fontSize: "14pt" }}>
+                {chat[1].userInfo.displayName}
+              </p>
+              <p className="text-secondary m-0 " style={{ fontSize: "10pt" }}>
+                {chat[1].lastMessage?.text}
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 };
